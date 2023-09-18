@@ -43,8 +43,5 @@ The CSV file will have the following columns:
 - Apply Link
 - Description
 
-## Note
-This script currently keeps track of jobs applied to only in the current session. If you want to maintain a history of all applied jobs across multiple sessions, you may need to implement additional functionality.
-
 ## Contribution
 Contributions to this project are welcome. If you find any issues or have ideas for improvements, please create a pull request or open an issue on GitHub.
