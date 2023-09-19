@@ -51,11 +51,12 @@ csv_filename = "lockheed_job_applications.csv"
 
 
 saved_jobs = [] #used to keep track of all the jobs that have been applied to
+#TODO only keeps track of jobs applied to in the current session
 
 file_exists = os.path.exists(csv_filename) #boolean to see if we are appending to old file or creating a new one
 with open(csv_filename, 'a', newline='', encoding='utf-8') as csv_file:
-        csv_writer = csv.writer(csv_file)
-        if file_exists:
+    csv_writer = csv.writer(csv_file)
+    if file_exists:
         #populate jobs array with all jobs in file
         with open(csv_filename, 'r') as file:
             csv_reader = csv.DictReader(file)
@@ -66,10 +67,10 @@ with open(csv_filename, 'a', newline='', encoding='utf-8') as csv_file:
                 saved_jobs.append(job_id)
         print("Appending to: " + csv_filename)
     else:
-        
         csv_writer.writerow(['Job Title', 'Location', 'Date', 'Job ID', 'Apply Link', 'Description'])
         print(csv_filename + " created")
 
+        
         
     while True:
 
@@ -80,6 +81,10 @@ with open(csv_filename, 'a', newline='', encoding='utf-8') as csv_file:
         link = input("Enter link for job to save (or 'q' to quit): ").strip()
         if link == 'q':
             break
+        if link[:8] != "https://":
+            print("Invalid link, try again")
+            continue
+
 
         page = requests.get(link)
         job_soup = BeautifulSoup(page.content, "html.parser")
@@ -97,7 +102,6 @@ with open(csv_filename, 'a', newline='', encoding='utf-8') as csv_file:
             date = extract_date(job_soup)
             apply_link = extract_apply_link(job_soup)
             description = extract_description(job_soup)
-
 
             csv_writer.writerow([title, location, date, job_id, apply_link,description])
             print(title + " saved!")
